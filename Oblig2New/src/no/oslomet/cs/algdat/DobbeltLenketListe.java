@@ -50,7 +50,48 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     public DobbeltLenketListe(T[] a) {
-        throw new UnsupportedOperationException();
+        //kaste NullPointerException hvis a er null
+        if(a == null){
+            throw new NullPointerException("Tabellen a er null!");
+        }
+        //lage en dobbeltlenket liste med verdiene fra tabellen a
+        //tas ikke med null-verdier i a
+
+        //hvis a er tom, ikke opprettes noen noder, hode og hale fortsatt er null
+        if(a.length == 0){
+            hode = null;
+            hale = null;
+            endringer = 0 ;
+            antall = 0;
+        }else{
+            //finn den først verdi i a som ikke er null
+            int firstNotNull = 0;
+            while(firstNotNull<a.length){
+                if(a[firstNotNull] == null){
+                    firstNotNull ++;
+                    break;
+                }
+            }
+
+            if(firstNotNull < a.length){
+                Node currentNode = new Node(a[firstNotNull],null,null);
+                //hode pekker til første node
+                hode = currentNode;
+                antall ++;
+
+                for(int i=firstNotNull+1; i<a.length;i++){
+                    if(a[i] != null){
+                        //nyeste node, og forrige peker currentNode
+                        Node nyNode = new Node(a[i],currentNode,null);
+                        //neste peker for currentNode pekker nyNode, og nå pekene mellom currentNode og nyNode er ferdig
+                        currentNode.neste = nyNode;
+                        currentNode = nyNode;//pekker currentNode til nyNode
+                        antall++;
+                    }
+                }
+                hale = currentNode;
+            }
+        }
     }
 
     public Liste<T> subliste(int fra, int til){
@@ -167,6 +208,11 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
+    public static void main(String[] args) {
+        Liste<String> liste = new DobbeltLenketListe<>();
+
+        System.out.println(liste.antall() + " " + liste.tom());
+    }
 } // class DobbeltLenketListe
 
 
