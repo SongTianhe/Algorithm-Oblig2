@@ -66,11 +66,8 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }else{
             //finn den først verdi i a som ikke er null
             int firstNotNull = 0;
-            while(firstNotNull<a.length){
-                if(a[firstNotNull] == null){
+            while(firstNotNull<a.length && a[firstNotNull] == null){
                     firstNotNull ++;
-                    break;
-                }
             }
 
             if(firstNotNull < a.length){
@@ -155,11 +152,35 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
+        StringJoiner result = new StringJoiner(",","[","]");
+        Node temp = hode;
+
+        while(true){
+            //Stoppe loop når det finnes ikke mer node(list er ferdig)
+            if(temp == null){
+                break;
+            }
+            //add verdien til result
+            result.add((String)temp.verdi);
+            temp = temp.neste;
+        }
+        return result.toString();
     }
 
     public String omvendtString() {
-        throw new UnsupportedOperationException();
+        StringJoiner resultOmvent = new StringJoiner(",","[","]");
+        Node temp = hale;
+
+        while(true){
+            //Stoppe loop når det finnes ikke mer node(list er ferdig)
+            if(temp == null){
+                break;
+            }
+            //add verdien til result
+            resultOmvent.add((String)temp.verdi);
+            temp = temp.forrige;
+        }
+        return resultOmvent.toString();
     }
 
     @Override
@@ -209,9 +230,10 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     public static void main(String[] args) {
-        Liste<String> liste = new DobbeltLenketListe<>();
+        String[] s1 = {"A","B","C"};
+        Liste<String> liste = new DobbeltLenketListe<>(s1);
 
-        System.out.println(liste.antall() + " " + liste.tom());
+        //System.out.println(liste.omvendtString());
     }
 } // class DobbeltLenketListe
 
