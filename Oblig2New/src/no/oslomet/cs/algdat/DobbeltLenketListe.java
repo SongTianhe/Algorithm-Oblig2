@@ -91,8 +91,30 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }
     }
 
+    //hjelp-metoden som sjekk fa og til er lovlig
+    private void fratilKontroller(int fra, int til,int antall){
+        if(fra<0){
+            throw new IndexOutOfBoundsException("fra : "+fra+" er ikke lovlig");
+        }
+        if(fra>til){
+            throw new IllegalArgumentException("fra kan ikke større enn til");
+        }
+        if(til>antall){
+            throw new IndexOutOfBoundsException("til : "+til+" er ikke lovlig");
+        }
+    }
+
     public Liste<T> subliste(int fra, int til){
-        throw new UnsupportedOperationException();
+        //sjekk hvis fra og til er lovlig
+        fratilKontroller(fra,til,antall);
+
+        Liste list = new DobbeltLenketListe();
+
+        for(int i=fra; i<til; i++){
+            list.leggInn(hent(i));
+        }
+
+        return list;
     }
 
     @Override
@@ -128,27 +150,93 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void leggInn(int indeks, T verdi) {
-        throw new UnsupportedOperationException();
+        //stoppes null-verdier
+        Objects.requireNonNull(verdi,"Verdi kan ikke være null");
+        //sjekk indeks er lovelig
+        if(indeks != antall){ indeksKontroll(indeks,false);}
+
+        //hvis verdi skal legges bakerst
+        if(indeks == antall){
+            leggInn(verdi);
+        }else if(indeks == 0){ //hvis verdi skal legges først
+            Node nyNode = new Node(verdi,null,hode);
+            hode.forrige = nyNode;
+            hode = nyNode;
+
+            endringer ++;
+            antall ++;
+        }else{//hvis verdi skal ligges i midten
+            Node foran = finnNode(indeks-1);
+            Node next = finnNode(indeks);
+            Node nyNode = new Node(verdi,foran,next);
+            foran.neste = nyNode;
+            next.forrige = nyNode;
+
+            endringer ++;
+            antall ++;
+        }
+
+
     }
 
     @Override
     public boolean inneholder(T verdi) {
-        throw new UnsupportedOperationException();
+        return indeksTil(verdi) != -1;
+    }
+
+    //hjelpmetoden
+    private Node<T> finnNode(int indeks){
+        Node temp;
+
+        if(indeks <= (antall/2)){
+            temp = hode;
+            for(int i=0; i<indeks; i++){
+                temp = temp.neste;
+            }
+        }else{
+            temp = hale;
+            for(int i=antall-1; i>indeks; i--){
+                temp = temp.forrige;
+            }
+        }
+        return temp;
     }
 
     @Override
     public T hent(int indeks) {
-        throw new UnsupportedOperationException();
+        indeksKontroll(indeks,false);
+        return finnNode(indeks).verdi;
     }
 
     @Override
     public int indeksTil(T verdi) {
-        throw new UnsupportedOperationException();
+        Node temp = hode;
+
+        //Hvis hode er null, betyr list er tom
+        if(temp != null){
+            for(int i=0; i<antall; i++){
+                if(temp.verdi.equals(verdi)){
+                    return i;
+                }
+                temp = temp.neste;
+            }
+        }
+        return -1;
     }
 
     @Override
     public T oppdater(int indeks, T nyverdi) {
-        throw new UnsupportedOperationException();
+        //sjekk om indeks og nyverdi er null
+        Objects.requireNonNull(indeks,"Indeks kan ikke være null");
+        Objects.requireNonNull(nyverdi,"Ny verdi kan ikke være null");
+
+        //save verdi til indeks før endring
+        T verdiFør = hent(indeks);
+        Node endreNode = finnNode(indeks);
+        endreNode.verdi = nyverdi;
+        endringer ++;
+
+        return verdiFør;
     }
 
     @Override
@@ -240,12 +328,6 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             throw new UnsupportedOperationException();
         }
 
-        //hjelpmetoden
-        private Node<T> finnNode(int indeks){
-            Node node = new Node(null,null,null);
-            return node;
-        }
-
     } // class DobbeltLenketListeIterator
 
     public static <T> void sorter(Liste<T> liste, Comparator<? super T> c) {
@@ -254,18 +336,18 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     public static void main(String[] args) {
 
-        String[] s1 = {"A","B","C"};
-        Liste<String> liste = new DobbeltLenketListe<>();
-
+        String[] s1 = {"A","B","C","D"};
+        //Liste<String> liste = new DobbeltLenketListe<>(s1);
+        DobbeltLenketListe<String> liste = new DobbeltLenketListe<>();
+        liste.leggInn(0, "4");  // ny verdi i tom liste
+        liste.leggInn(0, "2");  // ny verdi legges forrest
+        liste.leggInn(2, "6");  // ny verdi legges bakerst
+        liste.leggInn(1, "3");  // ny verdi nest forrest
+        liste.leggInn(3, "5");  // ny verdi nest bakerst
+        liste.leggInn(0, "1");  // ny verdi forrest
+        liste.leggInn(6, "7");  // ny verdi legges bakerst
+        System.out.println(liste.antall);
         System.out.println(liste.toString());
-
-        for(String i : s1){
-            liste.leggInn(i);
-            System.out.println(liste.toString()+liste.antall());
-        }
-
-        liste.leggInn("");
-        System.out.println(liste.toString()+liste.antall());
     }
 } // class DobbeltLenketListe
 
