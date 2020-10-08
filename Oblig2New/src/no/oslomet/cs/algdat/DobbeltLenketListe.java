@@ -12,7 +12,7 @@ import java.util.StringJoiner;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Predicate;
-
+import java.util.stream.Stream;
 
 
 public class DobbeltLenketListe<T> implements Liste<T> {
@@ -107,7 +107,24 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public boolean leggInn(T verdi) {
-        throw new UnsupportedOperationException();
+        //Stoppes null-verdier
+        Objects.requireNonNull(verdi,"Verdi kan ikke være null");
+
+        Node node = new Node(verdi,null,null);
+        //sjekk hvis listen er tom
+        if(hode == null){
+            hode = node;
+            hale = node;
+        }else{
+            hale.forrige = hale;
+            hale.neste = node;
+            node.forrige = hale;
+            hale=node;
+        }
+        endringer ++;
+        antall ++;
+
+        return true;
     }
 
     @Override
@@ -152,7 +169,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public String toString() {
-        StringJoiner result = new StringJoiner(",","[","]");
+        StringJoiner result = new StringJoiner(", ","[","]");
         Node temp = hode;
 
         while(true){
@@ -161,14 +178,14 @@ public class DobbeltLenketListe<T> implements Liste<T> {
                 break;
             }
             //add verdien til result
-            result.add((String)temp.verdi);
+            result.add(String.valueOf(temp.verdi));
             temp = temp.neste;
         }
         return result.toString();
     }
 
     public String omvendtString() {
-        StringJoiner resultOmvent = new StringJoiner(",","[","]");
+        StringJoiner result = new StringJoiner(", ","[","]");
         Node temp = hale;
 
         while(true){
@@ -177,10 +194,10 @@ public class DobbeltLenketListe<T> implements Liste<T> {
                 break;
             }
             //add verdien til result
-            resultOmvent.add((String)temp.verdi);
+            result.add(String.valueOf(temp.verdi));
             temp = temp.forrige;
         }
-        return resultOmvent.toString();
+        return result.toString();
     }
 
     @Override
@@ -231,9 +248,18 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     public static void main(String[] args) {
         String[] s1 = {"A","B","C"};
-        Liste<String> liste = new DobbeltLenketListe<>(s1);
+        Liste<String> liste = new DobbeltLenketListe<>();
 
-        //System.out.println(liste.omvendtString());
+        System.out.println(liste.toString());
+        /*
+        for(String i : s1){
+            liste.leggInn(i);
+            System.out.println(liste.toString()+liste.antall());
+        }*/
+
+        liste.leggInn("");
+        System.out.println(liste.toString()+liste.antall());
+
     }
 } // class DobbeltLenketListe
 
