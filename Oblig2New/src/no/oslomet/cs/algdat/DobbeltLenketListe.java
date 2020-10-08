@@ -116,10 +116,9 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             hode = node;
             hale = node;
         }else{
-            hale.forrige = hale;
             hale.neste = node;
             node.forrige = hale;
-            hale=node;
+            hale = node;
         }
         endringer ++;
         antall ++;
@@ -169,6 +168,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public String toString() {
+
         StringJoiner result = new StringJoiner(", ","[","]");
         Node temp = hode;
 
@@ -240,6 +240,12 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             throw new UnsupportedOperationException();
         }
 
+        //hjelpmetoden
+        private Node<T> finnNode(int indeks){
+            Node node = new Node(null,null,null);
+            return node;
+        }
+
     } // class DobbeltLenketListeIterator
 
     public static <T> void sorter(Liste<T> liste, Comparator<? super T> c) {
@@ -247,19 +253,19 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     public static void main(String[] args) {
+
         String[] s1 = {"A","B","C"};
         Liste<String> liste = new DobbeltLenketListe<>();
 
         System.out.println(liste.toString());
-        /*
+
         for(String i : s1){
             liste.leggInn(i);
             System.out.println(liste.toString()+liste.antall());
-        }*/
+        }
 
         liste.leggInn("");
         System.out.println(liste.toString()+liste.antall());
-
     }
 } // class DobbeltLenketListe
 
