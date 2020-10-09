@@ -12,8 +12,14 @@ Oppgaven er levert av følgende studenter:
 
 # Beskrivelse av oppgaveløsning (maks 5 linjer per oppgave)
 
-* Oppgave 1: Løste ved å implementere.
-* Oppgave 2: toString og omvendtString løst ved StringJoiner
+* Oppgave 1: Løste ved å implementere. Opprett ny node i for-loop hvis ikke er null, og gjør pekker riktig.
+* Oppgave 2: toString og omvendtString løst ved StringJoiner. boolean LeggInn løst ved å peker neste og forrige peker riktig.
+* Oppgave 3: a er løst ved å kode alle 3 metoder. hent() bruker finnNode(), og oppdater() bruker begge hent og finnNode. b løst ved å bruk leggInn(hent()) i en for-løkke 
+* Oppgave 4: indeksTil() finner indeks til verdi, og inneholder sjekker hvis det finnes verdi(ved bruk av indeksTil(verdi)).
+* Oppgave 5: leggInn(indeks,verdi) legger inn verdien til riktig indeks. Den løst ved bruk å peker neste og forrige peker riktig, og bruker hjelpmetode finnNode. Også skjekker indeks ved indeksKontroll metode.
+* Oppgave 6: Både fjern() og boolean fjern() brukt ingen hjelpmetode(men den kjøre fortere med hjelp metoden, selv om test viser innefektiv). De to metodene er ganske likt, løset ved en for-loop og flere if-else.
+* Oppgave 7: Trenger ikke å gjør den, men oppgave8 test pass ikke uten den. Brukt to måte, en som gå gjennom listen ved while, og en som brukt fjern().
+* Oppgave 8: Løst ved å gjør return riktig, peker riktig og throw riktig
 
 
 
