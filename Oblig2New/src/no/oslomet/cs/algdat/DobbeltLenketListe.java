@@ -281,6 +281,9 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public T fjern(int indeks) {
         indeksKontroll(indeks,false);
 
+        //måte1 : som brukt jeg finnNode(), den bruker 1s800ms, men inneffektiv i test
+
+        /*
         Node<T> temp = finnNode(indeks);
         if(antall == 1){//hvis det finnes bare en verdi, gjør list til tom
             hode = null;
@@ -295,7 +298,35 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             temp.forrige.neste = temp.neste;
             temp.neste.forrige = temp.forrige;
         }
+        antall --;
+        endringer ++;
+        */
 
+
+        //måte2 : brukt ikke finnNode(), tidsbruk er 2s300ms, men ikke inneffektiv feil nå kjør test
+        Node<T> temp = hode;
+        for(int i=0; i<antall; i++) {
+            //hvis det finnes verdi
+            if (i == indeks) {
+                if (i==0 || i == antall-1) {
+                    if (antall == 1) {///hvis det finnes bare en verdi, gjør list til tom
+                        hode = null;
+                        hale = null;
+                    } else if (i == 0) {//hvis først verdi skal fjerns
+                        hode = hode.neste;
+                        temp.neste.forrige = null;
+                    } else {//fjern sist node
+                        hale = temp.forrige;
+                        temp.forrige.neste = null;
+                    }
+                } else {
+                    temp.forrige.neste = temp.neste;
+                    temp.neste.forrige = temp.forrige;
+                }
+                break;
+            }
+            temp=temp.neste;
+        }
         antall --;
         endringer ++;
 
@@ -304,7 +335,27 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void nullstill() {
-        throw new UnsupportedOperationException();
+        //begge måter har ikke mye forskjell på tids bruk
+
+        //måte1 : bruker 20-30ms
+        Node temp = hode;
+        while(temp.neste != null){
+            hode = hode.neste;
+            temp.neste.forrige = null;
+            temp = temp.neste;
+        }
+        hode = null;
+        hale = null;
+        antall = 0;
+        endringer ++;
+
+        //måte 2 : bruker 20-30ms
+        /*
+        while(antall != 0){
+            fjern(0);
+        }
+        antall = 0;
+        endringer ++;*/
     }
 
     @Override
@@ -394,14 +445,6 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     public static <T> void sorter(Liste<T> liste, Comparator<? super T> c) {
         throw new UnsupportedOperationException();
-    }
-
-    public static void main(String[] args) {
-        String[] navn = { "Lars" , "Anders" , "Bodil" , "Kari" , "Per" , "Berit" };
-        Liste<String> liste = new DobbeltLenketListe<>(navn);
-        liste.forEach(s -> System. out .print(s + " " ));
-        System. out .println();
-        for (String s : liste) System. out .print(s + " " );
     }
 } // class DobbeltLenketListe
 
